@@ -21,8 +21,8 @@ const Register = () => {
 
     try {
       await register(name, email, password);
-      // Automatically redirect to login page
-      navigate('/login');
+      // Now automatically logged in, go to dashboard
+      navigate('/today');
     } catch (err) {
       setError(err || 'Registration failed. Please try again.');
     } finally {

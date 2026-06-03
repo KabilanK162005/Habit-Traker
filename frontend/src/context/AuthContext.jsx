@@ -36,6 +36,8 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password) => {
     try {
       await api.post('/auth/register', { name, email, password });
+      // Automatically log in after registration to get a fresh token
+      return await login(email, password);
     } catch (error) {
       throw error.response?.data?.message || 'Registration failed. Please try again.';
     }

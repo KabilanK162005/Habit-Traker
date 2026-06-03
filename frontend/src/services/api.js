@@ -1,13 +1,20 @@
 import axios from 'axios';
 
+let baseURL = import.meta.env.VITE_API_BASE || 'http://localhost:8080/api';
+if (baseURL && !baseURL.endsWith('/api')) {
+  baseURL = baseURL.endsWith('/') ? `${baseURL}api` : `${baseURL}/api`;
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE || 'http://localhost:8080/api',
+  baseURL,
   withCredentials: true,
 });
 
+console.log('API Base URL:', api.defaults.baseURL);
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('habit_flow_token');
-  if (token) {
+  // Only add token if it exists and we are not calling auth endpoints
+  if (token && !config.url.includes('/auth/')) {
     config.headers['Authorization'] = `Bearer ${token}`;
   }
   return config;
